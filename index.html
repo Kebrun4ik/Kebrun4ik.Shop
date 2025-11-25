@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kebrun4ikShop — Горные товары</title>
+  <style>
+.hero-slogan {
+  text-align: center;
+  margin: 80px auto;
+  padding: 40px 20px;
+  max-width: 800px;
+  background: rgba(0, 0, 0, 0.5); /* полупрозрачный фон */
+  border: 2px solid #fff; /* обводка */
+  border-radius: 15px;
+}
+
+.hero-slogan h1 {
+  font-size: 42px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+.hero-slogan p {
+  font-size: 22px;
+  color: #f0f0f0;
+}
+
+.category-buttons{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin-bottom:25px;
+}
+
+.category-buttons button{
+  background:#0077cc;
+  border:none;
+  padding:12px 24px;
+  color:white;
+  font-size:18px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 0 8px rgba(0,0,0,0.4);
+}
+
+.category-buttons button:hover{
+  background:#005fa3;
+  transform:scale(1.06);
+}
+
+.category{
+  display:none;
+  background:rgba(0,0,0,0.55);
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      color:#fff;
+      background:url('https://s0.rbk.ru/v6_top_pics/media/img/7/96/347141641904967.webp') no-repeat center center fixed;
+      background-size:cover;
+    }
+    header{
+      background:rgba(0,0,0,0.6);
+      color:#fff;
+      padding:20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    header h1{margin:0;font-size:26px}
+    button.catalog-btn{background:#0077cc;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:16px;cursor:pointer}
+
+    /* Корзина */
+    .cart-icon{
+      position:relative;
+      cursor:pointer;
+      font-size:20px;
+    }
+    .cart-count{
+      position:absolute;
+      top:-8px;
+      right:-10px;
+      background:red;
+      color:#fff;
+      border-radius:50%;
+      padding:2px 6px;
+      font-size:12px;
+    }
+
+    /* Каталог */
+    #catalog{display:none;padding:30px;max-width:1100px;margin:0 auto;background:rgba(0,0,0,0.6);border-radius:12px}
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+    .card{background:rgba(255,255,255,0.9);color:#000;border-radius:10px;box-shadow:0 0 8px rgba(0,0,0,0.3);padding:15px}
+    .card img{width:100%;height:250px;object-fit:cover;border-radius:8px}
+    .card h3{margin:10px 0 5px}
+    .price{color:#0077cc;font-weight:bold;margin-bottom:10px;font-size:18px}
+    button{background:#0077cc;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
+
+    /* Окно корзины */
+    #cartModal{
+      display:none;
+      position:fixed;
+      top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.8);
+      padding-top:80px;
+    }
+    #cartContent{
+      background:#fff;color:#000;
+      max-width:450px;
+      margin:0 auto;
+      padding:20px;
+      border-radius:12px;
+    }
+    .pay-btn{background:#28a745;margin-top:10px;width:100%}
+.hero-slogan {
+  animation: fadeIn 1.8s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.back-btn {
+  display:block;
+  margin:10px 0 20px;
+  background:#444;
+  color:#fff;
+  padding:8px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  width:120px;
+}
+.sub-items {
+  display:none;
+  margin-top:10px;
+  background:rgba(255,255,255,0.1);
+  padding:10px;
+  border-radius:8px;
+}
+
+.sub-btn {
+  background:#0a84ff;
+  border:none;
+  padding:8px 16px;
+  color:#fff;
+  border-radius:8px;
+  cursor:pointer;
+  margin-bottom:10px;
+  display:block;
+}
+  </style>
+</head>
+<body>
+
+
+<header>
+  <h1>Kebrun4ikShop</h1>
+  <div style="display:flex;gap:20px;align-items:center;">
+    <button class="catalog-btn" onclick="toggleCatalog()">Каталог</button>
+
+    <div class="cart-icon" onclick="openCart()">🛒
+      <div class="cart-count" id="cartCount">0</div>
+    </div>
+  </div>
+</header>
+
+<div class="hero-slogan">
+  <h1>Добро пожаловать в Kebrun4ikShop</h1>
+  <p>Лучшие товары для гор и активного отдыха</p>
+</div>
+
+  <section id="catalog">
+  <h2 style="text-align:center;margin-bottom:20px;">Каталог товаров</h2>
+
+  <!-- ===== Кнопки категорий ===== -->
+  <div class="category-buttons">
+    <button onclick="showCategory('clothes')">Одежда</button>
+    <button onclick="showCategory('shoes')">Обувь</button>
+    <button onclick="showCategory('mountain')">Горные товары</button>
+  </div>
+
+  <!-- ===== ОДЕЖДА ===== -->
+  <div class="category" id="clothes">
+    <button class="back-btn" onclick="hideCategory()">← Назад</button>
+
+    <!-- Подкатегории -->
+    <button class="sub-btn" onclick="toggleSub('jackets')">Куртки</button>
+    <div class="sub-items" id="jackets">
+      <div class="products">
+        <div class="card">
+          <img src="https://cdn-images.farfetch-contents.com/31/64/23/73/31642373_61444970_600.jpg" alt="Arc'teryx Gamma">
+          <h3>Arc'teryx куртка Gamma</h3>
+          <div class="price">59 990 ₸</div>
+          <button onclick="addToCart('Куртка Arc\'teryx Gamma',59990)">В корзину</button>
+        </div>
+        <div class="card">
+          <img src="https://cdn-images.farfetch-contents.com/31/64/17/23/31641723_61445433_600.jpg" alt="Arc'teryx Beta SL">
+          <h3>Arc'teryx куртка Beta SL</h3>
+          <div class="price">56 990 ₸</div>
+          <button onclick="addToCart('Куртка Arc\'teryx Beta SL',56990)">В корзину</button>
+        </div>
+        <div class="card">
+          <img src="https://tirol.ru/upload/resize_cache/iblock/4d6/945_945_1c8d3b8bf8904cd61d95b56a4a9832795/4d671cef42476c86af884e8356b4a34f.jpg" alt="Arc'teryx Atom">
+          <h3>Arc'teryx куртка Atom</h3>
+          <div class="price">49 990 ₸</div>
+          <button onclick="addToCart('Куртка Arc\'teryx Atom',49990)">В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="sub-btn" onclick="toggleSub('pants')">Штаны</button>
+    <div class="sub-items" id="pants">
+      <div class="products">
+        <div class="card">
+          <img src="https://alpindustria.ru/i/product/m/-35463_1.jpg" alt="Брюки Sabre AR">
+          <h3>Брюки Arc'teryx Sabre AR</h3>
+          <div class="price">29 990 ₸</div>
+          <button onclick="addToCart('Брюки Arc\'teryx Sabre AR',29990)">В корзину</button>
+        </div>
+        <div class="card">
+          <img src="https://alpindustria.ru/i/product/l/-40875_1.png" alt="Брюки Cassiar">
+          <h3>Брюки Arc'teryx Cassiar</h3>
+          <div class="price">25 990 ₸</div>
+          <button onclick="addToCart('Брюки Arc\'teryx Cassiar',25990)">В корзину</button>
+        </div>
+        <div class="card">
+          <img src="https://xamax.com.ua/uploads/shop/products/large/38abfdfc7857b704fc754f4334563687.jpg" alt="Брюки Rush">
+          <h3>Брюки Arc'teryx Rush</h3>
+          <div class="price">22 990 ₸</div>
+          <button onclick="addToCart('Брюки Arc\'teryx Rush',22990)">В корзину</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="sub-btn" onclick="toggleSub('shorts')">Шорты</button>
+    <div class="sub-items" id="shorts">
+      <div class="products">
+        <div class="card">
+          <img src="https://cdn.intertop.com/load/mp649670/412x550/MAIN.jpg" alt="The North Face шорты">
+          <h3>The North Face шорты</h3>
+          <div class="price">15 990 ₸</div>
+          <button onclick="addToCart('Шорты The North Face',15990)">В корзину</button>
+        </div>
+        <div class="card">
+          <img src="https://m.sportkult.ru/ipreview/goods/820/820/1508231-6000_32314__106972_2.jpg" alt="Jack Wolfskin шорты">
+          <h3>Jack Wolfskin шорты</h3>
+          <div class="price">14 990 ₸</div>
+          <button onclick="addToCart('Шорты Jack Wolfskin',14990)">В корзину</button>
+        </div>
+        <div class="card">
+          <img src="https://img.joomcdn.net/a0bfd48ad2ff7b14c627251f976167dbdfb33451_1024_1024.jpeg" alt="Nike ACG шорты">
+          <h3>Nike ACG шорты</h3>
+          <div class="price">12 990 ₸</div>
+          <button onclick="addToCart('Шорты Nike ACG',12990)">В корзину</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ОБУВЬ ===== -->
+  <div class="category" id="shoes">
+    <button class="back-btn" onclick="hideCategory()">← Назад</button>
+    <h3 style="text-align:center;margin-bottom:20px;">Обувь</h3>
+    <div class="products">
+      <div class="card">
+        <img src="https://www.ldmountaincentre.com/images/arcteryx-konseal-fl-2-leather-gtx-p44152-248946_zoom.jpg" alt="Arc'teryx Konseal GTX">
+        <h3>Arc'teryx Konseal GTX</h3>
+        <div class="price">39 990 ₸</div>
+        <button onclick="addToCart('Кроссовки Konseal GTX',39990)">В корзину</button>
+      </div>
+      <div class="card">
+        <img src="https://sneakerfreak.ru/wp-content/uploads/2022/01/Nike-ACG-Mountain-Fly-Low-GTX-SE-Hazel-Rush-Khaki-Atomic-Orange-DD2861-200-Release-Date-4-scaled-e1642691930151.jpeg" alt="Nike ACG Mountain Fly">
+        <h3>Nike ACG Mountain Fly</h3>
+        <div class="price">37 990 ₸</div>
+        <button onclick="addToCart('Nike ACG Mountain Fly',37990)">В корзину</button>
+      </div>
+      <div class="card">
+        <img src="https://momsbox.kz/upload/iblock/da7/332abr4ayk74a34kwugzxmfl2vhoeonk/23.jpg" alt="The North Face Slip-On">
+        <h3>The North Face Slip-On</h3>
+        <div class="price">35 990 ₸</div>
+        <button onclick="addToCart('Slip-on The North Face',35990)">В корзину</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ГОРНЫЕ ТОВАРЫ ===== -->
+  <div class="category" id="mountain">
+    <button class="back-btn" onclick="hideCategory()">← Назад</button>
+    <h3 style="text-align:center;margin-bottom:20px;">Горные товары</h3>
+    <div class="products">
+      <div class="card">
+        <img src="https://resources.cdn-kaspi.kz/img/m/p/p4f/p0c/49640721.jpeg?format=gallery-medium" alt="Палатка кемпинговая 2-местная">
+        <h3>Палатка кемпинговая 2-местная</h3>
+        <div class="price">129 990 ₸</div>
+        <button onclick="addToCart('Палатка кемпинговая',129990)">В корзину</button>
+      </div>
+      <div class="card">
+        <img src="https://gorny-club.kz/wp-content/uploads/2018/08/71J3OeN8h7L._UY445_.jpg" alt="Треккинговые палки">
+        <h3>Треккинговые палки</h3>
+        <div class="price">5 990 ₸</div>
+        <button onclick="addToCart('Треккинговые палки',5990)">В корзину</button>
+      </div>
+      <div class="card">
+        <img src="https://resources.cdn-kaspi.kz/img/m/p/p26/p29/69078836.png?format=gallery-large" alt="Кошки MASATO">
+        <h3>Кошки MASATO</h3>
+        <div class="price">16 990 ₸</div>
+        <button onclick="addToCart('Кошки MASATO',16990)">В корзину</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<script>
+function showCategory(id){
+  document.querySelectorAll('.category').forEach(cat=>{
+    cat.style.display='none';
+  });
+  document.getElementById(id).style.display='block';
+}
+
+let cart = [];
+
+function toggleCatalog(){
+  const c = document.getElementById('catalog');
+  c.style.display = c.style.display==='block' ? 'none' : 'block';
+}
+
+function addToCart(name, price){
+  cart.push({name, price});
+  document.getElementById('cartCount').innerText = cart.length;
+}
+
+function openCart(){
+  document.getElementById('cartModal').style.display='block';
+  let list = '';
+  let total = 0;
+  cart.forEach(item=>{
+    list += `<li>${item.name} — ${item.price} ₸</li>`;
+    total += item.price;
+  });
+  document.getElementById('cartList').innerHTML = list;
+  document.getElementById('cartTotal').innerText = total;
+}
+function closeCart(){
+  document.getElementById('cartModal').style.display='none';
+}
+
+function pay(method){
+  alert("Оплата через " + method + " пока в демо-режиме ✓");
+}
+function hideCategory(){
+  document.querySelectorAll('.category').forEach(cat=>{
+    cat.style.display='none';
+  });
+}
+function toggleSub(id){
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+</script>
+<!-- ===== Окно корзины ===== -->
+<div id="cartModal">
+  <div id="cartContent">
+    <h2>Ваша корзина</h2>
+    <ul id="cartList"></ul>
+    <div style="margin-top:10px; font-weight:bold;">Итого: <span id="cartTotal">0</span> ₸</div>
+    <button class="pay-btn" onclick="pay('Картой')">Оплатить картой</button>
+    <button class="pay-btn" style="background:#dc3545;margin-top:5px;" onclick="closeCart()">Закрыть</button>
+  </div>
+</div>
+
+<!-- ======= Footer ======= -->
+<footer style="background:#111; color:#fff; padding:20px 20px; text-align:center; font-family:Arial, sans-serif;">
+  <h2 style="margin-bottom:10px; font-size:20px;">Контакты</h2>
+  
+  <div style="display:flex; flex-direction:column; gap:6px; align-items:center; font-size:14px;">
+    
+    <div>
+      📞 <a href="tel:+77052029379" style="color:#fff; text-decoration:none;">+7 705 202 93 79</a>
+    </div>
+    
+    <div>
+      📧 <a href="mailto:nurbek777@gmail.com" style="color:#fff; text-decoration:none;">nurbek777@gmail.com</a>
+    </div>
+    
+    <div>
+      📍 улица Розыбакиева 247А, MEGA Alma-Ata
+    </div>
+    
+    <div>
+      📸 <a href="https://www.instagram.com/Kebrun4ikShop" target="_blank" style="color:#fff; text-decoration:none;">@Kebrun4ikShop</a>
+    </div>
+    
+  </div>
+  
+  <p style="margin-top:15px; font-size:12px; color:#bbb;">© 2025 Kebrun4ikShop. Все права защищены.</p>
+</footer>
+
+
+</body>
+</html>
